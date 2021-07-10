@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Explorer</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&display=swap');
+      * {
+        font-family: 'Poppins', sans-serif;
+      }
+      iframe{
+        border: none;
+        border-radius: 5px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      }
+      #root{
+        justify-content: center;
+        display: flex;
+        margin-bottom: 100px;
+      }
+      #uploadBtn{
+        margin-top: 20px;
+        border: none;
+        border-radius: 5px;
+        width: 70px;
+        height: 30px;
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      }
+      #uploadBtn:hover{
+        box-shadow: rgba(0, 0, 0, 0.315) 0px 3px 8px;
+        cursor: pointer;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div style="display: flex; justify-content: center; margin-bottom: 50px;">
+      <a href="/upload.html"><button id="uploadBtn">Upload</button></a>
+    </div>
+    <script>
+      likePost = (htmlElement) => {
+
+        item = htmlElement.getAttribute("postData");
+        item = JSON.parse(item);
+        htmlElement.textContent = `${++item.likes} likes`;
+        htmlElement.setAttribute("disabled", "");
+
+        console.log(item);
+        const data = {...item};
+        const options = {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data)
+        }
+        fetch("/api", options).then(response => {
+          console.log(response);
+        })
+      }
+
+      async function getData(){
+        const response = await fetch('/api');
+        const data = await response.json();
+
+        for(item of data){
+          const root = document.createElement("div");
+          const divHolder = document.createElement("div");
+          const player = document.createElement("iframe");
+          const text = document.createElement("p");
+          const likeBtn = document.createElement("button");
+          const likesDiv = document.createElement("div");
+
+          likeBtn.setAttribute("onclick", "likePost(this)");
+          likeBtn.setAttribute("postData", JSON.stringify(item));
+
+          likeBtn.textContent=`${item.likes} likes`;
+          likesDiv.append(likeBtn);
+          likesDiv.setAttribute("id", "likesDiv");
+
+          root.setAttribute("id", "root");
+          text.textContent = item.comment;
+
+          var urlStr = item.url;
+          var idIndex = urlStr.indexOf("?v");
+          var idIndexEnd = urlStr.indexOf("&");
+          idIndexEnd = (idIndexEnd === -1) ? urlStr.length : idIndexEnd;
+          console.log(idIndexEnd);
+          var watchId = urlStr.substring(idIndex+3, idIndexEnd);
+          var embededUrl = `https://www.youtube.com/embed/${watchId}?start=${item.start}&end=${item.end}`
+
+          player.setAttribute("width", 420);
+          player.setAttribute("height", 345);
+          player.setAttribute("src", embededUrl);
+
+          divHolder.append(text);
+          divHolder.append(player);
+          divHolder.append(likesDiv);
+
+          root.append(divHolder);
+          document.body.append(root);
+        }
+        console.log(data);
+      }
+      getData();
+    </script>
+
+    
+
+  </body>
+</html>

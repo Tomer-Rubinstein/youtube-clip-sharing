@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Document</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&display=swap');
+      * {
+        font-family: 'Poppins', sans-serif;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      const postClip = () => {
+        console.log("posting clip...")
+
+        const start = document.getElementById("start").value;
+        const end = document.getElementById("end").value;
+        const comment = document.getElementById("comment").value;
+        console.log(comment);
+        const url = document.getElementById("url").value;
+
+        document.getElementById("start").value = "";
+        document.getElementById("end").value = "";
+        document.getElementById("url").value = "";
+        document.getElementById("comment").value = "";
+
+        const data = {start, end, url, comment};
+        console.log(data);
+        const options = {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data)
+        }
+
+        fetch("/api", options).then(response => {
+          console.log(response);
+        })
+      }
+    </script>
+
+    <div style="display: flex; justify-content: center;">
+      <div>
+        <h1>Clip Sharing App</h1>
+
+        <input type="text" id="url" placeholder="YouTube URL" style="width: 200px;"><br/><br/>
+        <input type="text" id="comment" placeholder="Comment" style="width: 200px;"><br/><br/>
+        <input type="text" id="start" placeholder="Start Second" style="width: 100px;"><br/><br/>
+        <input type="text" id="end" placeholder="End Second" style="width: 100px;"><br/><br/>
+        <button onclick="postClip()">Post</button></br>
+    
+        <a href="/">Explorer Page</a>
+      </div>
+    </div>
+
+  </body>
+</html>
