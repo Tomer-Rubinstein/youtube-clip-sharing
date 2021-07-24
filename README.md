@@ -3,6 +3,8 @@ Users can share parts of a video on the web app. Meaning, they specify a YouTube
 Other users can view the clips and like it. For now, no authentication is implemented, so everyone can like a clip as many times as they want as long as they reload the page.
 I am using Node.js and NeDB for the database management.
 
+[watch the full demonstration on youtube](https://www.youtube.com/watch?v=rbxgLYsUuRo)
+
 **Required packages**:
 ```
 npm install nedb
