@@ -81,17 +81,9 @@
           root.setAttribute("id", "root");
           text.textContent = item.comment;
 
-          var urlStr = item.url;
-          var idIndex = urlStr.indexOf("?v");
-          var idIndexEnd = urlStr.indexOf("&");
-          idIndexEnd = (idIndexEnd === -1) ? urlStr.length : idIndexEnd;
-          console.log(idIndexEnd);
-          var watchId = urlStr.substring(idIndex+3, idIndexEnd);
-          var embededUrl = `https://www.youtube.com/embed/${watchId}?start=${item.start}&end=${item.end}`
-
           player.setAttribute("width", 420);
           player.setAttribute("height", 345);
-          player.setAttribute("src", embededUrl);
+          player.setAttribute("src", item.url);
 
           divHolder.append(text);
           divHolder.append(player);

@@ -13,6 +13,18 @@
 
   <body>
     <script>
+      // parse the url from ...watch?v=vid to .../embed/vid?start=x&end=y
+      const parseUrl = (url, start, end) => {
+        var idIndex = url.indexOf("?v");
+        var idIndexEnd = url.indexOf("&");
+        idIndexEnd = (idIndexEnd === -1) ? url.length : idIndexEnd;
+        console.log(idIndexEnd);
+        var watchId = url.substring(idIndex+3, idIndexEnd);
+        var embededUrl = `https://www.youtube.com/embed/${watchId}?start=${start}&end=${end}`
+        return embededUrl;
+      }
+
+      // sending a post request to the webserver
       const postClip = () => {
         console.log("posting clip...")
 
@@ -20,14 +32,16 @@
         const end = document.getElementById("end").value;
         const comment = document.getElementById("comment").value;
         console.log(comment);
-        const url = document.getElementById("url").value;
+        url = document.getElementById("url").value;
 
         document.getElementById("start").value = "";
         document.getElementById("end").value = "";
         document.getElementById("url").value = "";
         document.getElementById("comment").value = "";
-
+        
+        url = parseUrl(url, start, end);
         const data = {start, end, url, comment};
+
         console.log(data);
         const options = {
           method: 'POST',
@@ -41,19 +55,37 @@
           console.log(response);
         })
       }
+
+      // on button click, load the url and display it to the user.
+      const viewVid = () => {
+        url = document.getElementById("url").value;
+        start = document.getElementById("start").value;
+        end = document.getElementById("end").value;
+
+        url = parseUrl(url, start, end);
+        console.log(url);
+        document.getElementById("viewFrame").setAttribute("src", url);
+      }
     </script>
 
-    <div style="display: flex; justify-content: center;">
+    <div style="display: flex; justify-content: space-evenly; margin-top: 50px;">
       <div>
         <h1>Clip Sharing App</h1>
 
-        <input type="text" id="url" placeholder="YouTube URL" style="width: 200px;"><br/><br/>
+        <input type="text" id="url" placeholder="YouTube URL" style="width: 200px;">
+        <button style="margin-left: 10px;" onclick="viewVid()">view</button>
+        <br/><br/>
+
         <input type="text" id="comment" placeholder="Comment" style="width: 200px;"><br/><br/>
         <input type="text" id="start" placeholder="Start Second" style="width: 100px;"><br/><br/>
         <input type="text" id="end" placeholder="End Second" style="width: 100px;"><br/><br/>
-        <button onclick="postClip()">Post</button></br>
+        <button onclick="postClip()">Post</button></br></br>
     
         <a href="/">Explorer Page</a>
+      </div>
+
+      <div>
+        <iframe id="viewFrame" width="420" height="315" src="" style="border: none; border-radius: 5px; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; margin-top: 30px;"></iframe>
       </div>
     </div>
 

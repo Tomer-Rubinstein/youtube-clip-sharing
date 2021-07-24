@@ -6,4 +6,5 @@ I am using Node.js and NeDB for the database management.
 **Required packages**:
 ```
 npm install nedb
+npm install express
 ```
